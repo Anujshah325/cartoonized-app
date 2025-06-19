@@ -3,7 +3,7 @@ from flask_cors import CORS
 import numpy as np
 import cv2
 import base64
-from cartoonizer import cartoonify
+from cartoonizer import exaggerate_face  # ✅ updated import
 from PIL import Image
 import io
 
@@ -28,16 +28,12 @@ def cartoonify_endpoint():
     print("✅ Received cartoonify request")
     data = request.json
     image_data = data['image']
-    params = data.get('params', {})
-    line_size = int(params.get('line_size', 7))
-    blur_value = int(params.get('blur_value', 7))
-    k = int(params.get('k', 9))
 
     try:
         image = decode_image(image_data)
         print("🖼️ Decoded image:", image.shape)
 
-        cartoon = cartoonify(image, line_size, blur_value, k)
+        cartoon = exaggerate_face(image)  # ✅ updated function
         print("🎨 Cartoon image created:", cartoon.shape)
 
         result = encode_image(cartoon)
@@ -50,3 +46,4 @@ def cartoonify_endpoint():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
